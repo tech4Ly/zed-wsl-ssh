@@ -78,6 +78,10 @@ pub struct ToggleCodeActions {
     #[serde(default)]
     #[serde(skip)]
     pub deployed_from_indicator: Option<DisplayRow>,
+    // Run first available task if there is only one.
+    #[serde(default)]
+    #[serde(skip)]
+    pub quick_launch: bool,
 }
 
 #[derive(PartialEq, Clone, Deserialize, Default, JsonSchema)]
@@ -108,20 +112,6 @@ pub struct ToggleComments {
     pub advance_downwards: bool,
     #[serde(default)]
     pub ignore_indent: bool,
-}
-
-#[derive(PartialEq, Clone, Deserialize, Default, JsonSchema)]
-#[serde(deny_unknown_fields)]
-pub struct FoldAt {
-    #[serde(skip)]
-    pub buffer_row: MultiBufferRow,
-}
-
-#[derive(PartialEq, Clone, Deserialize, Default, JsonSchema)]
-#[serde(deny_unknown_fields)]
-pub struct UnfoldAt {
-    #[serde(skip)]
-    pub buffer_row: MultiBufferRow,
 }
 
 #[derive(PartialEq, Clone, Deserialize, Default, JsonSchema)]
@@ -226,7 +216,6 @@ impl_actions!(
         ExpandExcerpts,
         ExpandExcerptsDown,
         ExpandExcerptsUp,
-        FoldAt,
         HandleInput,
         MoveDownByLines,
         MovePageDown,
@@ -244,7 +233,6 @@ impl_actions!(
         ShowCompletions,
         ToggleCodeActions,
         ToggleComments,
-        UnfoldAt,
         FoldAtLevel,
     ]
 );
@@ -261,7 +249,9 @@ actions!(
         ApplyDiffHunk,
         Backspace,
         Cancel,
+        CancelFlycheck,
         CancelLanguageServerWork,
+        ClearFlycheck,
         ConfirmRename,
         ConfirmCompletionInsert,
         ConfirmCompletionReplace,
@@ -299,6 +289,8 @@ actions!(
         DuplicateSelection,
         ExpandMacroRecursively,
         FindAllReferences,
+        FindNextMatch,
+        FindPreviousMatch,
         Fold,
         FoldAll,
         FoldFunctionBodies,
@@ -317,6 +309,9 @@ actions!(
         GoToPreviousHunk,
         GoToImplementation,
         GoToImplementationSplit,
+        GoToNextChange,
+        GoToParentModule,
+        GoToPreviousChange,
         GoToPreviousDiagnostic,
         GoToTypeDefinition,
         GoToTypeDefinitionSplit,
@@ -379,6 +374,7 @@ actions!(
         RevertFile,
         ReloadFile,
         Rewrap,
+        RunFlycheck,
         ScrollCursorBottom,
         ScrollCursorCenter,
         ScrollCursorCenterTopBottom,
@@ -420,17 +416,23 @@ actions!(
         Tab,
         Backtab,
         ToggleBreakpoint,
+        ToggleCase,
         DisableBreakpoint,
         EnableBreakpoint,
         EditLogBreakpoint,
+        DebuggerRunToCursor,
+        DebuggerEvaluateSelectedText,
         ToggleAutoSignatureHelp,
         ToggleGitBlameInline,
         OpenGitBlameCommit,
+        ToggleDiagnostics,
         ToggleIndentGuides,
         ToggleInlayHints,
+        ToggleInlineValues,
         ToggleInlineDiagnostics,
         ToggleEditPrediction,
         ToggleLineNumbers,
+        ToggleMinimap,
         SwapSelectionEnds,
         SetMark,
         ToggleRelativeLineNumbers,
